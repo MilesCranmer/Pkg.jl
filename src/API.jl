@@ -1651,6 +1651,10 @@ function _activate_dep(dep_name::AbstractString)
 end
 function activate(path::AbstractString; shared::Bool=false, temp::Bool=false, io::IO=stderr_f())
     temp && pkgerror("Can not give `path` argument when creating a temporary environment")
+    if !isempty(path) && first(path) == '@'
+        @warn """The functional version of `activate` treats '@' literally.
+        To use a shared environment, use the `shared` flag instead."""
+    end
     if !shared
         # `pkg> activate path`/`Pkg.activate(path)` does the following
         # 1. if path exists, activate that
